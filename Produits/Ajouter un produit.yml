@@ -1,0 +1,22 @@
+info:
+  name: Ajouter un produit
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/products/add"
+  body:
+    type: json
+    data: |
+      {
+        "title": "Mon super produit",
+        "price": 42
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

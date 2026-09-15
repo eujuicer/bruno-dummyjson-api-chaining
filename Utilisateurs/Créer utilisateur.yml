@@ -1,0 +1,31 @@
+info:
+  name: Créer utilisateur
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/users/add"
+  body:
+    type: json
+    data: |
+      {
+        "firstName": "Alice",
+        "lastName": "Dupont",
+        "age": 28
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        let data = res.getBody();
+        bru.setVar("newUserId", data.id);
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true

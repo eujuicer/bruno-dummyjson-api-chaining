@@ -1,0 +1,49 @@
+info:
+  name: NRequête de Login copy
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/auth/login"
+  body:
+    type: json
+    data: |-
+      {
+        "username": "emilys",
+        "password": "emilyswrong",
+        "expiresInMins": 30
+      }
+  auth:
+    type: bearer
+    token: ""
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("La variable jwt_token a bien été définie", function () {
+          const token = bru.getVar("jwt_token");
+          expect(token).to.not.be.undefined;
+          expect(token).to.not.be.empty;
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+  actions:
+    - type: set-variable
+      phase: after-response
+      selector:
+        expression: res.body.accessToken
+        method: jsonq
+      variable:
+        name: jwt_token
+        scope: runtime
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

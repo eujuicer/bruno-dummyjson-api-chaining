@@ -1,0 +1,33 @@
+info:
+  name: NUtilisation du Token
+  type: http
+  seq: 4
+
+http:
+  method: GET
+  url: "{{baseUrl}}/auth/me"
+  auth:
+    type: bearer
+    token: faketoken
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const data = res.getBody();
+
+        test("Statut 401 et message d'erreur correct", () => {
+          expect(res.getStatus()).to.equal(401);
+          expect(data.message).to.equal("Invalid/Expired Token!");
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "401"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

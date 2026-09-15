@@ -1,0 +1,72 @@
+info:
+  name: Requête de Login
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/auth/login"
+  body:
+    type: json
+    data: |-
+      {
+        "username": "emilys",
+        "password": "emilyspass",
+        "expiresInMins": 30
+      }
+  auth:
+    type: bearer
+    token: "{{jwt_token}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const data = res.getBody();
+        const token = data.accessToken;
+        console.log(token);
+        const parts = token.split(".");
+        console.log(parts);
+        const mypayload = parts[1]
+        console.log(mypayload);
+        const payloadJson = atob(mypayload);
+        console.log(payloadJson);
+        const payload = JSON.parse(payloadJson);
+        console.log(payload.username);
+
+        test("Le token existe et est un string", () => {
+          expect(data).to.have.property("accessToken");
+          expect(data.accessToken).to.be.a("string");
+        });
+
+        bru.setVar("auth_token_script", data.accessToken);
+    - type: tests
+      code: |-
+        test("La variable jwt_token a bien été définie", function () {
+          const token = bru.getVar("jwt_token");
+          expect(token).to.not.be.undefined;
+          expect(token).to.not.be.empty;
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "401"
+      disabled: true
+    - expression: auth_token_script
+      operator: isDefined
+  actions:
+    - type: set-variable
+      phase: after-response
+      selector:
+        expression: res.body.accessToken
+        method: jsonq
+      variable:
+        name: jwt_token
+        scope: runtime
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

@@ -1,0 +1,27 @@
+info:
+  name: " Validation de la présence d'une clé spécifique dans un tableau"
+  type: http
+  seq: 5
+
+http:
+  method: GET
+  url: "{{baseUrl}}/carts"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        let body = res.getBody();
+        let hasBigCart = body.carts.some(c => c.total > 500);
+
+        test("Au moins un panier a un total > 500", function() {
+          expect(hasBigCart).to.be.true;
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
