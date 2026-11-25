@@ -1,22 +1,22 @@
-# Bruno — Chaînage d'API avec DummyJSON
+# Bruno — API chaining with DummyJSON
 
-Collection Bruno d'exercices sur le chaînage pur de requêtes API, basée sur [dummyjson.com](https://dummyjson.com).
+Bruno collection of exercises on pure API request chaining, based on [dummyjson.com](https://dummyjson.com).
 
-## Contenu
+## Contents
 
-- **Login** — authentification et récupération de token
-- **Utilisateurs** — consultation et création d'utilisateurs
-- **Produits** — listing, ajout, validations (structure, pagination, erreurs 404, cohérence mathématique)
-- **E-Commerce** — parcours utilisateur complet en 5 requêtes chaînées :
-  1. `01 - Login` — authentification, capture de `jwt_token` et `user_id`
-  2. `02 - Profil Utilisateur` — récupération du profil via le token, capture de `user_city`
-  3. `03 - Panier Utilisateur` — récupération du panier, capture de `cart_id` et `product_id`
-  4. `04 - Détail Produit` — détail du produit, capture de `product_category`
-  5. `05 - Produits Similaires` — recherche des produits de la même catégorie
+- **Login** — authentication and token retrieval
+- **Utilisateurs** (users) — fetching and creating users
+- **Produits** (products) — listing, creating, validations (structure, pagination, 404 errors, mathematical consistency)
+- **E-Commerce** — complete user journey in 5 chained requests:
+  1. `01 - Login` — authentication, captures `jwt_token` and `user_id`
+  2. `02 - Profil Utilisateur` (user profile) — fetches the profile with the token, captures `user_city`
+  3. `03 - Panier Utilisateur` (user cart) — fetches the cart, captures `cart_id` and `product_id`
+  4. `04 - Détail Produit` (product detail) — fetches the product detail, captures `product_category`
+  5. `05 - Produits Similaires` (similar products) — searches for products in the same category
 
-## Utilisation
+## Usage
 
-Ouvrir le dossier dans [Bruno](https://www.usebruno.com/), sélectionner l'environnement **Dev**, puis lancer le Runner sur le dossier `E-Commerce` pour exécuter la chaîne complète.
+Open the folder in [Bruno](https://www.usebruno.com/), select the **Dev** environment, then run the Runner on the `E-Commerce` folder to execute the whole chain.
 
 ```bash
 npx @usebruno/cli run E-Commerce --env Dev -r
